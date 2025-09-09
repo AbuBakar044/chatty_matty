@@ -7,9 +7,16 @@ class SplashController extends GetxController {
     super.onInit();
   }
 
-  void initializeRoute() {
-    Future.delayed(const Duration(seconds: 3), () {
-      Get.offAllNamed(RouteNames.kHome);
-    });
+  void initializeRoute() async {
+    try {
+      var prefs = await SharedPreferences.getInstance();
+      Future.delayed(const Duration(seconds: 3), () {
+        if (prefs.containsKey(AppConstants.sliderKey)) {
+          Get.offAllNamed(RouteNames.kHome);
+        } else {
+          Get.offAllNamed(RouteNames.kSliderOne);
+        }
+      });
+    } catch (e) {}
   }
 }
