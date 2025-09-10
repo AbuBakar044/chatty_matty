@@ -8,7 +8,10 @@ export 'package:chatty_matty/controllers/splash_controller.dart';
 export 'package:chatty_matty/views/intro/slider_one.dart';
 export 'package:chatty_matty/views/intro/slider_two.dart';
 export 'package:google_fonts/google_fonts.dart';
-
+export '../views/auth/login.dart';
+export '../views/auth/signup.dart';
+export '../controllers/slider_controller.dart';
+export '../controllers/auth_controller.dart';
 export 'package:loading_animation_widget/loading_animation_widget.dart';
 export 'package:chatty_matty/utils/app_colors.dart';
 export 'package:chatty_matty/utils/app_constants.dart';

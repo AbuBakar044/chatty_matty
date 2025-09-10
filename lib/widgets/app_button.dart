@@ -5,6 +5,8 @@ class AppButton extends StatelessWidget {
   final String buttonName;
   final Color? textColor;
   final Color? buttonColor;
+  final Color? borderColor;
+  final String? buttonImage;
   final VoidCallback onTap;
   const AppButton({
     super.key,
@@ -13,6 +15,8 @@ class AppButton extends StatelessWidget {
     required this.onTap,
     this.textColor,
     this.buttonColor,
+    this.borderColor,
+    this.buttonImage,
   });
 
   @override
@@ -20,14 +24,29 @@ class AppButton extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        height: 40,
+        height: 45,
         width: width,
         decoration: BoxDecoration(
           color: buttonColor ?? AppColors.kPrimaryColor,
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(AppConstants.kAppCircleBorder),
+          border: BoxBorder.all(
+            color: borderColor ?? AppColors.kTransparentColor,
+          ),
         ),
         child: Center(
-          child: MyText(text: buttonName, color: textColor),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              buttonImage != null
+                  ? Image.asset(buttonImage ?? '', height: 20, width: 20)
+                  : const SizedBox.shrink(),
+              buttonImage != null
+                  ? const SizedBox(width: 20)
+                  : const SizedBox.shrink(),
+              MyText(text: buttonName, color: textColor),
+            ],
+          ),
         ),
       ),
     );

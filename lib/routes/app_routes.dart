@@ -7,5 +7,8 @@ class AppRoutes {
     GetPage(name: RouteNames.kHome, page: () => HomeScreen()),
     GetPage(name: RouteNames.kSliderOne, page: () => SliderOne()),
     GetPage(name: RouteNames.kSliderTwo, page: () => SliderTwo()),
+    GetPage(name: RouteNames.kLogin, page: () => Login()),
+    GetPage(name: RouteNames.kSignup, page: () => Signup()),
+
   ];
 }

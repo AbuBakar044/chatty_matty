@@ -6,6 +6,7 @@ class SliderTwo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(SliderController());
     return Scaffold(
       backgroundColor: AppColors.kWhiteColor,
 
@@ -39,7 +40,9 @@ class SliderTwo extends StatelessWidget {
                   Expanded(
                     child: AppButton(
                       buttonName: 'Previous',
-                      onTap: () {},
+                      onTap: () {
+                        Get.back();
+                      },
                       textColor: AppColors.kWhiteColor,
                       buttonColor: AppColors.kRedColor,
                     ),
@@ -47,7 +50,9 @@ class SliderTwo extends StatelessWidget {
                   Expanded(
                     child: AppButton(
                       buttonName: 'Continue',
-                      onTap: () {},
+                      onTap: () async{
+                       await controller.savePreferences();
+                      },
                       textColor: AppColors.kWhiteColor,
                     ),
                   ),
