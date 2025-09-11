@@ -1,5 +1,3 @@
-
-
 import 'package:chatty_matty/utils/app_imports.dart';
 
 class Signup extends StatelessWidget {
@@ -7,6 +5,206 @@ class Signup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    final controller = Get.put(AuthController());
+    return Scaffold(
+      backgroundColor: AppColors.kWhiteColor,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 20),
+          child: SingleChildScrollView(
+            child: Form(
+              key: controller.signupFormKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  MyText(
+                    text: 'Signup',
+                    size: 30,
+                    weight: FontWeight.bold,
+                    color: AppColors.kBlackColor,
+                  ),
+                  MyText(
+                    text: 'Please create your account to continue!',
+                    size: 16,
+                    color: AppColors.kGreyColor,
+                  ),
+
+                  SizedBox(height: 50),
+                  TextFormField(
+                    controller: controller.nameCtrl,
+                    validator: AppConstants.commonValidator,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(
+                          AppConstants.kAppCircleBorder,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(
+                          AppConstants.kAppCircleBorder,
+                        ),
+                        borderSide: BorderSide(color: AppColors.kPrimaryColor),
+                      ),
+                      hintText: 'Enter Full Name',
+                      labelText: 'Full Name',
+                    ),
+                  ),
+                  SizedBox(height: 20),
+
+                  TextFormField(
+                    controller: controller.emailCtrl,
+                    validator: AppConstants.commonValidator,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(
+                          AppConstants.kAppCircleBorder,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(
+                          AppConstants.kAppCircleBorder,
+                        ),
+                        borderSide: BorderSide(color: AppColors.kPrimaryColor),
+                      ),
+                      hintText: 'Enter Email',
+                      labelText: 'Email',
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  Obx(() {
+                    return TextFormField(
+                      controller: controller.passwordCtrl,
+                      validator: AppConstants.commonValidator,
+                      obscureText: controller.isHidden.value,
+                      decoration: InputDecoration(
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            controller.changeVisibility();
+                          },
+                          icon: Icon(
+                            controller.isHidden.value
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
+                        ),
+
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(
+                            AppConstants.kAppCircleBorder,
+                          ),
+                          borderSide: BorderSide(
+                            color: AppColors.kPrimaryColor,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(
+                            AppConstants.kAppCircleBorder,
+                          ),
+                          borderSide: BorderSide(
+                            color: AppColors.kPrimaryColor,
+                          ),
+                        ),
+                        hintText: 'Enter Password',
+                        labelText: 'Password',
+                      ),
+                    );
+                  }),
+                  const SizedBox(height: 30),
+                  Align(
+                    alignment: Alignment.center,
+                    child: AppButton(
+                      buttonName: 'Signup',
+                      onTap: () async {
+                        if (controller.signupFormKey.currentState!.validate()) {
+                          await controller.registerUserWithFirebase();
+                        }
+                      },
+                      textColor: AppColors.kWhiteColor,
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      MyText(text: "ALready have an account? ", size: 12),
+                      InkWell(
+                        onTap: () {
+                          Get.back();
+                        },
+                        child: MyText(
+                          text: 'Login',
+                          weight: FontWeight.bold,
+                          size: 12,
+                          color: AppColors.kPrimaryColor,
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 30),
+
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Divider(
+                          color: AppColors.kGreyColor,
+                          thickness: 1,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: MyText(text: 'or', color: AppColors.kGreyColor),
+                      ),
+                      Expanded(
+                        child: Divider(
+                          color: AppColors.kGreyColor,
+                          thickness: 1,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+
+                  AppButton(
+                    buttonName: 'Create with Google',
+                    onTap: () {},
+                    buttonImage: AppConstants.kGoogleImage,
+                    buttonColor: AppColors.kTransparentColor,
+                    borderColor: AppColors.kGreyColor,
+                  ),
+                  const SizedBox(height: 20),
+                  AppButton(
+                    buttonName: 'Create with Facebook',
+                    onTap: () {},
+                    buttonImage: AppConstants.kFbImage,
+                    buttonColor: AppColors.kTransparentColor,
+                    borderColor: AppColors.kGreyColor,
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      MyText(
+                        text: 'For more information, please see our ',
+                        size: 11,
+                      ),
+                      InkWell(
+                        onTap: () {},
+                        child: MyText(
+                          text: 'Privacy Policy',
+                          weight: FontWeight.bold,
+                          size: 11,
+                          color: AppColors.kPrimaryColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

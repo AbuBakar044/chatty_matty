@@ -99,6 +99,24 @@ class Login extends StatelessWidget {
                     textColor: AppColors.kWhiteColor,
                   ),
                 ),
+                const SizedBox(height: 15),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    MyText(text: "Don't have an account? ", size: 12),
+                    InkWell(
+                      onTap: () {
+                        Get.toNamed(RouteNames.kSignup);
+                      },
+                      child: MyText(
+                        text: 'Create here',
+                        weight: FontWeight.bold,
+                        size: 12,
+                        color: AppColors.kPrimaryColor,
+                      ),
+                    ),
+                  ],
+                ),
 
                 const SizedBox(height: 30),
 

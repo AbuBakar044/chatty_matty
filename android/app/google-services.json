@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "250359910525",
+    "project_id": "chattmatty-58b62",
+    "storage_bucket": "chattmatty-58b62.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:250359910525:android:3e5d37649009e63461a114",
+        "android_client_info": {
+          "package_name": "com.example.chatty_matty"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBw5Aoqz-W2Y_NNCfzD8MHTlt_Sl07qUMk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
