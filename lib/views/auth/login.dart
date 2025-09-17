@@ -12,61 +12,33 @@ class Login extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 20),
           child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                MyText(
-                  text: 'Login',
-                  size: 30,
-                  weight: FontWeight.bold,
-                  color: AppColors.kBlackColor,
-                ),
-                MyText(
-                  text: 'Please login to your account to continue!',
-                  size: 16,
-                  color: AppColors.kGreyColor,
-                ),
-
-                SizedBox(height: 50),
-                TextFormField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(
-                        AppConstants.kAppCircleBorder,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(
-                        AppConstants.kAppCircleBorder,
-                      ),
-                      borderSide: BorderSide(color: AppColors.kPrimaryColor),
-                    ),
-                    hintText: 'Enter Email',
-                    labelText: 'Email',
+            child: Form(
+              key: controller.loginFormKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  MyText(
+                    text: 'Login',
+                    size: 30,
+                    weight: FontWeight.bold,
+                    color: AppColors.kBlackColor,
                   ),
-                ),
-                SizedBox(height: 20),
-                Obx(() {
-                  return TextFormField(
-                    obscureText: controller.isHidden.value,
-                    decoration: InputDecoration(
-                      suffixIcon: IconButton(
-                        onPressed: () {
-                          controller.changeVisibility();
-                        },
-                        icon: Icon(
-                          controller.isHidden.value
-                              ? Icons.visibility
-                              : Icons.visibility_off,
-                        ),
-                      ),
+                  MyText(
+                    text: 'Please login to your account to continue!',
+                    size: 16,
+                    color: AppColors.kGreyColor,
+                  ),
 
+                  SizedBox(height: 50),
+                  TextFormField(
+                    controller: controller.emailCtrl,
+                    validator: AppConstants.commonValidator,
+                    decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(
                           AppConstants.kAppCircleBorder,
                         ),
-                        borderSide: BorderSide(color: AppColors.kPrimaryColor),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(
@@ -74,102 +46,151 @@ class Login extends StatelessWidget {
                         ),
                         borderSide: BorderSide(color: AppColors.kPrimaryColor),
                       ),
-                      hintText: 'Enter Password',
-                      labelText: 'Password',
+                      hintText: 'Enter Email',
+                      labelText: 'Email',
                     ),
-                  );
-                }),
+                  ),
+                  SizedBox(height: 20),
+                  Obx(() {
+                    return TextFormField(
+                      obscureText: controller.isHidden.value,
+                      controller: controller.passwordCtrl,
+                      validator: AppConstants.commonValidator,
+                      decoration: InputDecoration(
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            controller.changeVisibility();
+                          },
+                          icon: Icon(
+                            controller.isHidden.value
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
+                        ),
 
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () {},
-                    child: MyText(
-                      text: 'Forgot Passowrd?',
-                      color: AppColors.kPrimaryColor,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(
+                            AppConstants.kAppCircleBorder,
+                          ),
+                          borderSide: BorderSide(
+                            color: AppColors.kPrimaryColor,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(
+                            AppConstants.kAppCircleBorder,
+                          ),
+                          borderSide: BorderSide(
+                            color: AppColors.kPrimaryColor,
+                          ),
+                        ),
+                        hintText: 'Enter Password',
+                        labelText: 'Password',
+                      ),
+                    );
+                  }),
+
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () {},
+                      child: MyText(
+                        text: 'Forgot Passowrd?',
+                        color: AppColors.kPrimaryColor,
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 30),
-                Align(
-                  alignment: Alignment.center,
-                  child: AppButton(
-                    buttonName: 'Connect',
-                    onTap: () {},
-                    textColor: AppColors.kWhiteColor,
-                  ),
-                ),
-                const SizedBox(height: 15),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    MyText(text: "Don't have an account? ", size: 12),
-                    InkWell(
-                      onTap: () {
-                        Get.toNamed(RouteNames.kSignup);
+                  const SizedBox(height: 30),
+                  Align(
+                    alignment: Alignment.center,
+                    child: AppButton(
+                      buttonName: 'Connect',
+                      onTap: () async {
+                        if (controller.loginFormKey.currentState!.validate()) {
+                          await controller.loginUserWithFirebase();
+                        }
                       },
-                      child: MyText(
-                        text: 'Create here',
-                        weight: FontWeight.bold,
-                        size: 12,
-                        color: AppColors.kPrimaryColor,
+                      textColor: AppColors.kWhiteColor,
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      MyText(text: "Don't have an account? ", size: 12),
+                      InkWell(
+                        onTap: () {
+                          Get.toNamed(RouteNames.kSignup);
+                        },
+                        child: MyText(
+                          text: 'Create here',
+                          weight: FontWeight.bold,
+                          size: 12,
+                          color: AppColors.kPrimaryColor,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
 
-                const SizedBox(height: 30),
+                  const SizedBox(height: 30),
 
-                Row(
-                  children: [
-                    Expanded(
-                      child: Divider(color: AppColors.kGreyColor, thickness: 1),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: MyText(text: 'or', color: AppColors.kGreyColor),
-                    ),
-                    Expanded(
-                      child: Divider(color: AppColors.kGreyColor, thickness: 1),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Divider(
+                          color: AppColors.kGreyColor,
+                          thickness: 1,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: MyText(text: 'or', color: AppColors.kGreyColor),
+                      ),
+                      Expanded(
+                        child: Divider(
+                          color: AppColors.kGreyColor,
+                          thickness: 1,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
 
-                AppButton(
-                  buttonName: 'Login with Google',
-                  onTap: () {},
-                  buttonImage: AppConstants.kGoogleImage,
-                  buttonColor: AppColors.kTransparentColor,
-                  borderColor: AppColors.kGreyColor,
-                ),
-                const SizedBox(height: 20),
-                AppButton(
-                  buttonName: 'Login with Facebook',
-                  onTap: () {},
-                  buttonImage: AppConstants.kFbImage,
-                  buttonColor: AppColors.kTransparentColor,
-                  borderColor: AppColors.kGreyColor,
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  children: [
-                    MyText(
-                      text: 'For more information, please see our ',
-                      size: 11,
-                    ),
-                    InkWell(
-                      onTap: () {},
-                      child: MyText(
-                        text: 'Privacy Policy',
-                        weight: FontWeight.bold,
+                  AppButton(
+                    buttonName: 'Login with Google',
+                    onTap: () {},
+                    buttonImage: AppConstants.kGoogleImage,
+                    buttonColor: AppColors.kTransparentColor,
+                    borderColor: AppColors.kGreyColor,
+                  ),
+                  const SizedBox(height: 20),
+                  AppButton(
+                    buttonName: 'Login with Facebook',
+                    onTap: () {},
+                    buttonImage: AppConstants.kFbImage,
+                    buttonColor: AppColors.kTransparentColor,
+                    borderColor: AppColors.kGreyColor,
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      MyText(
+                        text: 'For more information, please see our ',
                         size: 11,
-                        color: AppColors.kPrimaryColor,
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                      InkWell(
+                        onTap: () {},
+                        child: MyText(
+                          text: 'Privacy Policy',
+                          weight: FontWeight.bold,
+                          size: 11,
+                          color: AppColors.kPrimaryColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),

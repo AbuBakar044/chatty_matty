@@ -6,6 +6,8 @@ class AuthController extends GetxController {
   var passwordCtrl = TextEditingController();
 
   var signupFormKey = GlobalKey<FormState>();
+  var loginFormKey = GlobalKey<FormState>();
+
 
   RxBool isHidden = true.obs;
 
@@ -24,6 +26,22 @@ class AuthController extends GetxController {
         nameCtrl.clear();
         emailCtrl.clear();
         passwordCtrl.clear();
+        Get.offAllNamed(RouteNames.kHome);
+      }
+    });
+
+    AppConstants.hideLoading();
+  }
+
+  Future<void> loginUserWithFirebase() async {
+    AppConstants.showLoading();
+    await FirebaseServices.loginUser(emailCtrl.text, passwordCtrl.text).then((
+      val,
+    ) {
+      if (val) {
+        emailCtrl.clear();
+        passwordCtrl.clear();
+        Get.offAllNamed(RouteNames.kHome);
       }
     });
 

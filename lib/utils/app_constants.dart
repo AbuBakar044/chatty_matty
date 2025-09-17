@@ -12,6 +12,11 @@ class AppConstants {
   static String kSliderKey = 'slider';
   static String kAppName = 'Chatty Matty';
 
+
+  //Firebase constants
+
+  static String kUserCollection = 'users';
+
   static double kAppCircleBorder = 15;
 
   static void kErrorSnackBar(String text) {

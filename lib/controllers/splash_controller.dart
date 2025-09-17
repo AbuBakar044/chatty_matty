@@ -11,7 +11,9 @@ class SplashController extends GetxController {
     try {
       var prefs = await SharedPreferences.getInstance();
       Future.delayed(const Duration(seconds: 3), () {
-        if (prefs.containsKey(AppConstants.kSliderKey)) {
+        if (FirebaseAuth.instance.currentUser != null) {
+          Get.offAllNamed(RouteNames.kHome);
+        } else if (prefs.containsKey(AppConstants.kSliderKey)) {
           Get.offAllNamed(RouteNames.kLogin);
         } else {
           Get.offAllNamed(RouteNames.kSliderOne);
