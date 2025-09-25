@@ -24,3 +24,5 @@ export '../services/firebase_services.dart';
 export 'package:firebase_core/firebase_core.dart';
 export '../firebase_options.dart';
 export 'package:flutter_easyloading/flutter_easyloading.dart';
+export '../controllers/home_controller/friends_controller.dart';
+export '../models/user_model.dart';

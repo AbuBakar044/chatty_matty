@@ -89,6 +89,7 @@ class FirebaseServices {
         email: email,
         password: pass,
         date: DateTime.now().toIso8601String(),
+        isOnline: true,
       );
       await fireStoreDB
           .collection(AppConstants.kUserCollection)
