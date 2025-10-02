@@ -5,6 +5,8 @@ class RouteNames {
   static const String kSliderTwo = '/slider2';
   static const String kLogin = '/login';
   static const String kSignup = '/signup';
+  static const String kChat = '/chat';
+
 
 
 

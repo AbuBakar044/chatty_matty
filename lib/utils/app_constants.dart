@@ -16,6 +16,10 @@ class AppConstants {
   //Firebase constants
 
   static String kUserCollection = 'users';
+  static String kChatsCollection = 'chats';
+  static String kMessagesCollection = 'messages';
+
+
 
   static double kAppCircleBorder = 15;
 

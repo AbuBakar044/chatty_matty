@@ -1,4 +1,6 @@
 
+import 'package:chatty_matty/views/chat/chat_screen.dart';
+
 import '../utils/app_imports.dart';
 
 class AppRoutes {
@@ -9,6 +11,7 @@ class AppRoutes {
     GetPage(name: RouteNames.kSliderTwo, page: () => SliderTwo()),
     GetPage(name: RouteNames.kLogin, page: () => Login()),
     GetPage(name: RouteNames.kSignup, page: () => Signup()),
+    GetPage(name: RouteNames.kChat, page: () => ChatScreen()),
 
   ];
 }

@@ -34,7 +34,10 @@ class OnlineFriends extends StatelessWidget {
                       final user = homeCtrl.friendsList[index];
                       return ListTile(
                         //tileColor: AppColors.kGreenColor,
-                        onTap: () {},
+                        onTap: () {
+                          homeCtrl.selectedUser.value = user;
+                          Get.toNamed(RouteNames.kChat);
+                        },
                         title: MyText(
                           text: user.name ?? '-',
                           size: 14,
