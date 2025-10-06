@@ -6,6 +6,7 @@ class ChatController extends GetxController {
   var messages = <Message>[].obs;
   final textController = TextEditingController();
   RxBool isSending = true.obs;
+  Map<String, bool> chatExists = {};
 
   String uniqueGroupID = '';
 
@@ -15,18 +16,6 @@ class ChatController extends GetxController {
     messages.add(Message(text: text, isMe: true, timestamp: DateTime.now()));
     await sendUserMessage(chattingUserId);
     textController.clear();
-
-    //Simulate reply after 1 second
-    // Future.delayed(const Duration(seconds: 1), () {
-    //   messages.add(
-    //     Message(
-    //       text: "Reply to: $text",
-    //       isMe: false,
-    //       timestamp: DateTime.now(),
-    //     ),
-    //   );
-    //   isSending.value = false;
-    // });
   }
 
   String getChatId(String user1, String user2) {
@@ -38,26 +27,102 @@ class ChatController extends GetxController {
         : "${user2}_$user1";
   }
 
+  // Future<void> sendUserMessage(String chattingUserId) async {
+  //   try {
+  //     String myId = FirebaseServices.firebaseAuth.currentUser!.uid;
+  //     final chatId = getChatId(myId, chattingUserId);
+  //     ChatModel chatModel = ChatModel(
+  //       userId: myId,
+  //       chatMsg: textController.text.trim(),
+  //       msgTime: DateTime.now(),
+  //       isRead: false,
+  //     );
+
+  //     await FirebaseServices.fireStoreDB
+  //         .collection(AppConstants.kChatsCollection)
+  //         .doc(chatId)
+  //         .collection(AppConstants.kMessagesCollection)
+  //         .add(chatModel.toJson())
+  //         .then((val) {
+  //           isSending.value = false;
+  //         });
+  //   } catch (e) {
+  //     debugPrint('.......... This is error: $e');
+  //   }
+  // }
+
+
   Future<void> sendUserMessage(String chattingUserId) async {
     try {
       String myId = FirebaseServices.firebaseAuth.currentUser!.uid;
       final chatId = getChatId(myId, chattingUserId);
+
+      final chatGroupRef = FirebaseServices.fireStoreDB
+          .collection(AppConstants.kChatsCollection)
+          .doc(chatId);
+
+      // ✅ Step 1: Check if chat already exists (cached check)
+      if (!chatExists.containsKey(chatId)) {
+        final chatSnap = await chatGroupRef.get();
+        chatExists[chatId] = chatSnap.exists;
+
+        if (!chatSnap.exists) {
+          // Create the chat document and add members
+          await chatGroupRef.set({
+            'createdAt': DateTime.now(),
+            'lastUpdated': DateTime.now(),
+            'lastMessage': '',
+          });
+
+          final membersRef = chatGroupRef.collection('members');
+
+          UserModel userModel = UserModel(
+            
+          );
+          await membersRef.doc(myId).set({
+            'userId': myId,
+            'joinedAt': DateTime.now(),
+          });
+          await membersRef.doc(chattingUserId).set({
+            'userId': chattingUserId,
+            'joinedAt': DateTime.now(),
+          });
+        }
+      }
+
+      // ✅ Step 2: Prepare and send the message
+      final messageText = textController.text.trim();
+      if (messageText.isEmpty) return; // prevent empty messages
+
       ChatModel chatModel = ChatModel(
         userId: myId,
-        chatMsg: textController.text.trim(),
+        chatMsg: messageText,
         msgTime: DateTime.now(),
         isRead: false,
       );
-      await FirebaseServices.fireStoreDB
-          .collection(AppConstants.kChatsCollection)
-          .doc(chatId)
+
+      await chatGroupRef
           .collection(AppConstants.kMessagesCollection)
-          .add(chatModel.toJson())
-          .then((val) {
-            isSending.value = false;
-          });
+          .add(chatModel.toJson());
+
+      // ✅ Step 3: Update chat metadata (for chat list previews)
+      await chatGroupRef.update({
+        'lastUpdated': DateTime.now(),
+        'lastMessage': messageText,
+        'lastSender': myId,
+      });
+
+      // ✅ Step 4: Clear input and mark sending done
+      textController.clear();
+      isSending.value = false;
     } catch (e) {
-      debugPrint('.......... This is error: $e');
+      debugPrint('.......... Error sending message: $e');
+      isSending.value = false;
     }
+  }
+
+
+  Future<void> getChatMessages() async {
+    try {} catch (e) {}
   }
 }
